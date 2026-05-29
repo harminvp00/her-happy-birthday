@@ -2,8 +2,9 @@
 <html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>HBD love</title>	    
-    <link type="text/css" rel="stylesheet" href="file/default.css">
+    <link type="text/css" rel="stylesheet" href="file/default.css?v=1.1">
     <script type="text/javascript" src="file/jquery.min.js"></script>
     <script type="text/javascript" src="file/jscex.min.js"></script>
     <script type="text/javascript" src="file/jscex-parser.js"></script>
@@ -31,13 +32,10 @@
         <div id="wrap">
             <div id="text">
                 <div id="code">
-                    <span class="say">Hey you 💞</span><br>
-                    <span class="say">Happy Birthday 🎈</span><br>
-                    <span class="say">May God bless you 🍀</span><br>
-                    <span class="say">And give u many happiness 💕</span><br>
-                    <span class="say">Just saying... you're pretty awesome ❤️</span><br>
-                    <span class="say">Sending good vibes and maybe a wink 😏</span><br>
-                    <span class="say">Hope u have a great day today ❤️😘</span><br>
+                    <span class="say">Happy Birthday to you Uma 🎂🥳🥰,</span><br>
+                    <span class="say">Stay happy and keep smiling,☺️</span><br>
+                    <span class="say">God bless you 🙌</span><br>
+                    <span class="say">Wishing you beautiful day as you are 😊</span><br>
                 </div>
             </div>
             <div id="clock-box">
@@ -60,6 +58,26 @@
         var height = canvas.height();        
         canvas.attr("width", width);
         canvas.attr("height", height);
+
+        var currentScale = 1;
+        function adjustLayout() {
+            var winWidth = $(window).width();
+            var winHeight = $(window).height();
+            var baseWidth = 1100;
+            var baseHeight = 680;
+            
+            currentScale = Math.min((winWidth * 0.95) / baseWidth, (winHeight * 0.95) / baseHeight);
+            if (currentScale > 1) {
+                currentScale = 1;
+            }
+            
+            $('#wrap').css({
+                'transform': 'translate(-50%, -50%) scale(' + currentScale + ')',
+                'transform-origin': 'center center'
+            });
+        }
+        adjustLayout();
+        $(window).resize(adjustLayout);
 
         var opts = {
             seed: {
@@ -105,8 +123,8 @@
         canvas.click(function(e) {
             playAudio();
             var offset = canvas.offset(), x, y;
-            x = e.pageX - offset.left;
-            y = e.pageY - offset.top;
+            x = (e.pageX - offset.left) / currentScale;
+            y = (e.pageY - offset.top) / currentScale;
             if (seed.hover(x, y)) {
                 hold = 0; 
                 canvas.unbind("click");
@@ -115,8 +133,8 @@
             }
         }).mousemove(function(e) {
             var offset = canvas.offset(), x, y;
-            x = e.pageX - offset.left;
-            y = e.pageY - offset.top;
+            x = (e.pageX - offset.left) / currentScale;
+            y = (e.pageY - offset.top) / currentScale;
             canvas.toggleClass('hand', seed.hover(x, y));
         });
 
